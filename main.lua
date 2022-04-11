@@ -144,14 +144,14 @@ function love.update(dt)
 		player1.dy = 0
 	end
 
-	-- Y axis Movement of Player2
-	if love.keyboard.isDown('up') then
-		player2.dy = -PADDLE_SPEED
-	elseif love.keyboard.isDown('down') then
-		player2.dy = PADDLE_SPEED
-	else
-		player2.dy = 0
-	end
+	-- -- Y axis Movement of Player2
+	-- if love.keyboard.isDown('up') then
+	-- 	player2.dy = -PADDLE_SPEED
+	-- elseif love.keyboard.isDown('down') then
+	-- 	player2.dy = PADDLE_SPEED
+	-- else
+	-- 	player2.dy = 0
+	-- end
 
 	-- X axis Movement of player1
 
@@ -164,13 +164,13 @@ function love.update(dt)
 	end
 
 	-- X Movement for player2
-	if love.keyboard.isDown('right') then
-		player2.dx = PADDLE_SPEED
-	elseif love.keyboard.isDown('left') then
-		player2.dx = -PADDLE_SPEED
-	else 
-		player2.dx = 0
-	end
+	-- if love.keyboard.isDown('right') then
+	-- 	player2.dx = PADDLE_SPEED
+	-- elseif love.keyboard.isDown('left') then
+	-- 	player2.dx = -PADDLE_SPEED
+	-- else 
+	-- 	player2.dx = 0
+	-- end
 
 	-- Limit PLayer1's movement till left side
 	if player1.dx < 0 then
@@ -234,8 +234,9 @@ function love.draw()
 		love.graphics.printf('Press Enter to play again.', 0, 30, VIRTUAL_WIDTH, 'center')
 	end
 	player1:render()
+	player2.y = ball.y
 	player2:render()
-
+	
 	ball:render()	
 
 	displayFPS()
