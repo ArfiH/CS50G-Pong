@@ -6,6 +6,8 @@ VIRTUAL_HEIGHT = 243
 
 PADDLE_SPEED = 200
 
+FACTOR = 1
+
 servingPlayer = 1
 winningPlayer = 0
 toWin = 5
@@ -72,9 +74,14 @@ function love.update(dt)
 		end
 	elseif gameState == 'play' then
 		if ball:collides(player1) then
-			ball.dx = -ball.dx * 1.03
-			ball.x = player1.x + 5
-			sounds['paddle_hit']:play()
+			if player1.x + (player1.width / 2) > ball.x + (ball.width / 2) then
+				ball.x = player1.x - 6
+				-- ball.dx = ball.dx * FACTOR
+			else
+				ball.dx = -ball.dx * FACTOR
+				ball.x = player1.x + 5
+				sounds['paddle_hit']:play()
+			end
 			if ball.dy < 0 then
 				ball.dy = -math.random(10, 150)
 			else
@@ -83,7 +90,7 @@ function love.update(dt)
 		end
 	
 		if ball:collides(player2) then
-			ball.dx = -ball.dx * 1.03
+			ball.dx = -ball.dx * FACTOR
 			ball.x = player2.x - 4
 			sounds['paddle_hit']:play()
 			if ball.dy < 0 then
@@ -158,7 +165,7 @@ function love.update(dt)
 	if love.keyboard.isDown('d') then
 		player1.dx = PADDLE_SPEED
 	elseif love.keyboard.isDown('a') then
-		player1.dx = -PADDLE_SPEED
+		player1.dx = -PADDLE_SPEED	
 	else 
 		player1.dx = 0
 	end
@@ -188,7 +195,10 @@ function love.update(dt)
 	end
 
 	player1:update(dt)
-	player2:update(dt)
+	if player2.y - 5 > ball.y 
+		or player2.y + 5 < ball.y then
+		player2:update(dt)
+	end
 end
 
 function love.keypressed(key)
@@ -234,7 +244,15 @@ function love.draw()
 		love.graphics.printf('Press Enter to play again.', 0, 30, VIRTUAL_WIDTH, 'center')
 	end
 	player1:render()
-	player2.y = ball.y
+	
+	-- AI Implementation
+	if player2.y < ball.y then
+		player2.dy = PADDLE_SPEED
+	elseif player2.y > ball.y then
+		player2.dy = -PADDLE_SPEED 		
+	else
+		player2.dy = 0
+	end
 	player2:render()
 	
 	ball:render()	
