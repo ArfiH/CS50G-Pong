@@ -74,14 +74,10 @@ function love.update(dt)
 		end
 	elseif gameState == 'play' then
 		if ball:collides(player1) then
-			if player1.x + (player1.width / 2) > ball.x + (ball.width / 2) then
-				ball.x = player1.x - 6
-				-- ball.dx = ball.dx * FACTOR
-			else
-				ball.dx = -ball.dx * FACTOR
-				ball.x = player1.x + 5
-				sounds['paddle_hit']:play()
-			end
+			ball.x = player1.x + 10
+			ball.dx = -ball.dx * FACTOR
+			sounds['paddle_hit']:play()
+
 			if ball.dy < 0 then
 				ball.dy = -math.random(10, 150)
 			else
