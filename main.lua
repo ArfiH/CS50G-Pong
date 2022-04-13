@@ -8,9 +8,12 @@ PADDLE_SPEED = 200
 
 FACTOR = 1
 
+player1Scored = true
+player2Scored = false
 servingPlayer = 1
 winningPlayer = 0
 toWin = 5
+timer = 1
 
 push = require 'push'
 Class = require 'class'
@@ -111,9 +114,12 @@ function love.update(dt)
         if ball.x < 0 then    		
 	        servingPlayer = 1
         	player2Score = player2Score + 1
+        	player2Scored = true
+        	
         	if player2Score >= toWin  then
         		winningPlayer = 2
         		sounds['score']:play()
+
         		gameState = 'done'
         	else
         		gameState = 'serve'
@@ -122,6 +128,8 @@ function love.update(dt)
         elseif ball.x > VIRTUAL_WIDTH then
         	player1Score = player1Score + 1
         	servingPlayer = 2	
+        	player1Scored = true
+
         	if player1Score >= toWin then
         		winningPlayer = 1    		
 	        	sounds['score']:play()
@@ -223,9 +231,16 @@ end
 
 function love.draw()
 	push:apply('start')
-	
     love.graphics.clear(40/255, 45/255, 52/255, 255/255)
 
+    -- Draw extra lines
+    love.graphics.setColor(255/255, 255/255, 255/255, 0.1)  
+    -- love.graphics.rectangle('line', VIRTUAL_WIDTH / 2 - 2, 0, 4, VIRTUAL_HEIGHT)	
+    love.graphics.rectangle('line', 3 * VIRTUAL_WIDTH / 4 - 1, 0, 1, VIRTUAL_HEIGHT)	
+ 	love.graphics.rectangle('line', VIRTUAL_WIDTH / 4 + 1, 0, 1, VIRTUAL_HEIGHT)	
+
+    love.graphics.setColor(1, 1, 1, 1)  
+    
     love.graphics.setFont(smallFont)
 	if gameState == 'start' then
 		love.graphics.printf('Press Enter to play', 0, 20, VIRTUAL_WIDTH, 'center') 
@@ -241,14 +256,7 @@ function love.draw()
 	end
 	player1:render()
 	
-	-- AI Implementation
-	if player2.y < ball.y then
-		player2.dy = PADDLE_SPEED
-	elseif player2.y > ball.y then
-		player2.dy = -PADDLE_SPEED 		
-	else
-		player2.dy = 0
-	end
+	player2.y = ball.y
 	player2:render()
 	
 	ball:render()	
@@ -262,4 +270,4 @@ function displayFPS()
 	love.graphics.setColor(0, 255, 0, 255)
 	love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10)
 end
- 
+
